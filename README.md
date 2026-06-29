@@ -1,5 +1,7 @@
 # Worldbuild MCP
 
+[![CI](https://github.com/jim-jam-james/worldbuild-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/jim-jam-james/worldbuild-mcp/actions/workflows/ci.yml)
+
 A schema-driven [Model Context Protocol](https://modelcontextprotocol.io) (MCP) server that turns an
 Obsidian vault into a queryable, self-validating worldbuilding database for TTRPGs (D&D), game
 settings, and novels.
