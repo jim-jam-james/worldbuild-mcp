@@ -177,11 +177,11 @@ Work top-to-bottom. **Phases 1–5 are plain Python you already know.** You don'
 Each phase ends at a real, testable milestone. Write tests *as you go*, not after.
 
 ### Phase 0 — Scaffold
-- [ ] `git init`; create repo structure (§3.2); MIT `LICENSE`; README stub.
-- [ ] `pyproject.toml` with `fastmcp`, `pyyaml`, `pytest`, `ruff`, `mypy` (or `pyright`).
-- [ ] Set up `uv` for the project (`uv venv`, `uv sync`).
-- [ ] `ruff` + type-checker config; minimal GitHub Actions `ci.yml` (lint + type-check + pytest).
-- [ ] First green CI run on an empty test. **Done when:** CI badge is green.
+- [x] `git init`; create repo structure (§3.2); MIT `LICENSE`; README stub.
+- [x] `pyproject.toml` with `fastmcp`, `pyyaml`, `pytest`, `ruff`, `mypy` (or `pyright`).
+- [x] Set up `uv` for the project (`uv venv`, `uv sync`).
+- [x] `ruff` + type-checker config; minimal GitHub Actions `ci.yml` (lint + type-check + pytest).
+- [x] First green CI run on an empty test. **Done when:** CI badge is green.
 
 ### Phase 1 — Schema & vault bootstrap (core)
 - [ ] Define the `schema.yaml` format (types, folders, required/optional fields, relationship specs with `target`/`cardinality`/`inverse`).
