@@ -14,7 +14,7 @@ build-backend = "hatchling.build"
 packages = ["src/worldbuild_core", "src/worldbuild_mcp"]
 
 [dependency-groups]
-dev = ["pytest", "ruff", "mypy"]
+dev = ["pytest", "ruff", "mypy", "types-PyYAML"]
 
 [tool.ruff]
 line-length = 100

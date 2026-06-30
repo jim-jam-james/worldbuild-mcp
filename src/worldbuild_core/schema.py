@@ -81,9 +81,7 @@ def build_schema(raw: dict[str, Any]) -> Schema:
                 continue
             target_spec = types.get(rel.target)
             if target_spec is None:
-                raise SchemaError(
-                    f"{source_name}.{rel.name} targets unknown type '{rel.target}'"
-                )
+                raise SchemaError(f"{source_name}.{rel.name} targets unknown type '{rel.target}'")
             inverse_spec = RelationshipSpec(
                 name=rel.inverse,
                 target=source_name,
