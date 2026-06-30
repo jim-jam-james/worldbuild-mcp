@@ -36,7 +36,7 @@ def test_file_write_round_trip(tmp_path):
         type="Character",
         name="Name",
         frontmatter={
-            "aliases": "[An Alias]",
+            "aliases": "An Alias",
             "member_of": ["[[Faction]]"],
             "located_in": "[[Location]]",
         },
