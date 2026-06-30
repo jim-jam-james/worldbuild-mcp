@@ -23,13 +23,13 @@ def test_relationship_parsing():
                         "member_of": {
                             "target": "Faction",
                             "cardinality": "many",
-                            "inverse": "members"
+                            "inverse": "members",
                         }
                     },
                 },
                 "Faction": {
                     "folder": "Factions",
-                }
+                },
             },
         }
     )
@@ -47,3 +47,89 @@ def test_relationship_parsing():
 def test_missing_version_rejected():
     with pytest.raises(SchemaError):
         build_schema({"types": {"Lore": {"folder": "Lore"}}})
+
+
+def test_inverse_is_derived():
+    schema = build_schema(
+        {
+            "version": 1,
+            "types": {
+                "Character": {
+                    "folder": "Characters",
+                    "relationships": {
+                        "member_of": {
+                            "target": "Faction",
+                            "cardinality": "many",
+                            "inverse": "members",
+                        }
+                    },
+                },
+                "Faction": {
+                    "folder": "Factions",
+                },
+            },
+        }
+    )
+    assert schema.version == 1
+    character = schema.get_type("Character")
+    faction = schema.get_type("Faction")
+    assert faction is not None
+    fact_relationships = faction.relationships
+    members = fact_relationships["members"]
+    assert members.target == character.name
+    assert members.derived is True
+    assert members.cardinality == "many"
+    assert members.inverse == "member_of"
+
+
+def test_unknown_target_rejected():
+    with pytest.raises(SchemaError):
+        build_schema(
+            {
+                "version": 1,
+                "types": {
+                    "Character": {
+                        "folder": "Characters",
+                        "relationships": {
+                            "member_of": {
+                                "target": "Faction",
+                                "cardinality": "many",
+                                "inverse": "members",
+                            }
+                        },
+                    }
+                },
+            }
+        )
+
+
+def test_inverse_collision_rejected():
+    with pytest.raises(SchemaError):
+        build_schema(
+            {
+                "version": 1,
+                "types": {
+                    "Character": {
+                        "folder": "Characters",
+                        "relationships": {
+                            "participant_in": {
+                                "target": "Event",
+                                "cardinality": "one",
+                                "inverse": "participants",
+                            }
+                        },
+                    },
+                    "Faction": {
+                        "folder": "Factions",
+                        "relationships": {
+                            "participant_in": {
+                                "target": "Event",
+                                "cardinality": "one",
+                                "inverse": "participants",
+                            }
+                        },
+                    },
+                    "Event": {"folder": "Events"},
+                },
+            }
+        )

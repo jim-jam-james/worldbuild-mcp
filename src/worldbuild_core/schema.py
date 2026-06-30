@@ -75,4 +75,25 @@ def build_schema(raw: dict[str, Any]) -> Schema:
             relationships=relationships,
         )
 
+    for source_name, source_spec in types.items():
+        for rel in list(source_spec.relationships.values()):
+            if rel.derived:
+                continue
+            target_spec = types.get(rel.target)
+            if target_spec is None:
+                raise SchemaError(
+                    f"{source_name}.{rel.name} targets unknown type '{rel.target}'"
+                )
+            inverse_spec = RelationshipSpec(
+                name=rel.inverse,
+                target=source_name,
+                inverse=rel.name,
+                cardinality="many",
+                derived=True,
+            )
+
+            if rel.inverse in target_spec.relationships:
+                raise SchemaError(f"Name is already used on {target_spec.name}")
+            target_spec.relationships[rel.inverse] = inverse_spec
+
     return Schema(version=version, types=types)
