@@ -1,8 +1,10 @@
 import pytest
 import yaml
 
+from worldbuild_core.entities import mint_uid
+from worldbuild_core.models import Entity
 from worldbuild_core.schema import build_schema
-from worldbuild_core.vault import init_vault
+from worldbuild_core.vault import init_vault, read_entity, write_entity
 
 
 def test_init_vault_creates_structure(tmp_path):
@@ -26,3 +28,27 @@ def test_init_vault_refuses_existing(tmp_path):
 
     with pytest.raises(FileExistsError):
         init_vault(tmp_path)
+
+
+def test_file_write_round_trip(tmp_path):
+    entity = Entity(
+        uid=mint_uid("Character", "Name"),
+        type="Character",
+        name="Name",
+        frontmatter={
+            "aliases": "[An Alias]",
+            "member_of": ["[[Faction]]"],
+            "located_in": "[[Location]]",
+        },
+        body="Body",
+    )
+
+    character_file = tmp_path / "Name.md"
+    write_entity(character_file, entity=entity)
+    reloaded = read_entity(character_file)
+
+    assert entity.uid == reloaded.uid
+    assert reloaded.name == "Name"
+    assert entity.type == reloaded.type
+    assert entity.frontmatter == reloaded.frontmatter
+    assert entity.body == reloaded.body

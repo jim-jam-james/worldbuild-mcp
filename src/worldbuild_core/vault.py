@@ -3,6 +3,8 @@ from pathlib import Path
 
 import yaml
 
+from worldbuild_core.entities import parse_entity, serialize_entity
+from worldbuild_core.models import Entity
 from worldbuild_core.schema import build_schema
 
 
@@ -24,3 +26,15 @@ def init_vault(path: Path) -> None:
 
     for type_spec in schema.types.values():
         (path / type_spec.folder).mkdir(parents=True, exist_ok=True)
+
+
+def read_entity(path: Path) -> Entity:
+    text = path.read_text(encoding="utf-8")
+    return parse_entity(text, name=path.stem)
+
+
+def write_entity(path: Path, entity: Entity) -> None:
+    text = serialize_entity(entity)
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(text, encoding="utf-8")
+    tmp.replace(path)
